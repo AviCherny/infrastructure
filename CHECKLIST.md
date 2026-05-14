@@ -17,9 +17,9 @@
 - [x] HTTP session fixture (conftest.py)
 
 ## API Tests
-- [ ] GET /airports
-- [ ] GET /airports/:id
-- [ ] POST /distances
+- [x] GET /airports
+- [x] GET /airports/:id
+- [x] POST /distances
 
 ## UI Layer
 - [ ] home_page.py (BlazeDemo)
