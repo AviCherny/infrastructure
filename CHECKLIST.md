@@ -14,7 +14,7 @@
 - [x] distances_client.py
 
 ## API Fixtures
-- [ ] HTTP session fixture (conftest.py)
+- [x] HTTP session fixture (conftest.py)
 
 ## API Tests
 - [ ] GET /airports
