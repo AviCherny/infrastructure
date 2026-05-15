@@ -28,13 +28,13 @@
 - [x] confirmation_page.py
 
 ## UI Fixtures
-- [ ] Browser fixture (conftest.py)
-- [ ] Page fixture
+- [x] Browser fixture (conftest.py)
+- [x] Page fixture
 
 ## UI Tests
-- [ ] Search for flight
-- [ ] Select flight
-- [ ] Complete purchase flow
+- [x] Search for flight
+- [x] Select flight
+- [x] Complete purchase flow
 
 ## Reporting
 - [ ] pytest markers configured
