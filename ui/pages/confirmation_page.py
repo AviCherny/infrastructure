@@ -5,7 +5,7 @@ class ConfirmationPage:
     def __init__(self, page: Page):
         self.page = page
         self.title = page.locator("h1")
-        self.booking_id = page.locator("table tbody tr:nth-child(1) td:nth-child(2)")
+        self.booking_id = page.locator("tr", has=page.locator("td", has_text="Id")).locator("td").nth(1)
 
     def get_title(self) -> str:
         return self.title.inner_text()

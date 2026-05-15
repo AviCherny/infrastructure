@@ -22,10 +22,10 @@
 - [x] POST /distances
 
 ## UI Layer
-- [ ] home_page.py (BlazeDemo)
-- [ ] results_page.py
-- [ ] purchase_page.py
-- [ ] confirmation_page.py
+- [x] home_page.py (BlazeDemo)
+- [x] results_page.py
+- [x] purchase_page.py
+- [x] confirmation_page.py
 
 ## UI Fixtures
 - [ ] Browser fixture (conftest.py)
@@ -38,4 +38,8 @@
 
 ## Reporting
 - [ ] pytest markers configured
-- [ ] HTML report setup (pytest-html)
+- [ ] Allure Report setup
+- [ ] Screenshots on UI test failure
+
+## CI/CD
+- [ ] GitHub Actions workflow (runs tests + publishes Allure report)

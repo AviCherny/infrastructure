@@ -1,5 +1,20 @@
+from dataclasses import dataclass
 from playwright.sync_api import Page
 from ui.pages.confirmation_page import ConfirmationPage
+
+
+@dataclass
+class PassengerDetails:
+    name: str
+    address: str
+    city: str
+    state: str
+    zip_code: str
+    card_type: str
+    credit_card_number: str
+    credit_card_month: str
+    credit_card_year: str
+    name_on_card: str
 
 
 class PurchasePage:
@@ -17,29 +32,17 @@ class PurchasePage:
         self.name_on_card = page.locator("#nameOnCard")
         self.purchase_btn = page.locator("input[value='Purchase Flight']")
 
-    def fill_and_submit(
-        self,
-        name: str,
-        address: str,
-        city: str,
-        state: str,
-        zip_code: str,
-        card_type: str,
-        credit_card_number: str,
-        credit_card_month: str,
-        credit_card_year: str,
-        name_on_card: str,
-    ):
-        self.name.fill(name)
-        self.address.fill(address)
-        self.city.fill(city)
-        self.state.fill(state)
-        self.zip_code.fill(zip_code)
-        self.card_type.select_option(card_type)
-        self.credit_card_number.fill(credit_card_number)
-        self.credit_card_month.fill(credit_card_month)
-        self.credit_card_year.fill(credit_card_year)
-        self.name_on_card.fill(name_on_card)
+    def fill_and_submit(self, details: PassengerDetails):
+        self.name.fill(details.name)
+        self.address.fill(details.address)
+        self.city.fill(details.city)
+        self.state.fill(details.state)
+        self.zip_code.fill(details.zip_code)
+        self.card_type.select_option(details.card_type)
+        self.credit_card_number.fill(details.credit_card_number)
+        self.credit_card_month.fill(details.credit_card_month)
+        self.credit_card_year.fill(details.credit_card_year)
+        self.name_on_card.fill(details.name_on_card)
         self.purchase_btn.click()
         self.page.wait_for_url("**/confirmation.php")
         return ConfirmationPage(self.page)
