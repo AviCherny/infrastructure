@@ -37,9 +37,16 @@
 - [x] Complete purchase flow
 
 ## Reporting
-- [ ] pytest markers configured
-- [ ] Allure Report setup
-- [ ] Screenshots on UI test failure
+- [x] pytest markers configured
+- [x] Allure Report setup
+- [x] Screenshots on UI test failure
 
 ## CI/CD
 - [ ] GitHub Actions workflow (runs tests + publishes Allure report)
+
+## Environment Support
+- [ ] Discuss: how to scale env config beyond current `os.getenv()` pattern
+  - Current: `UI_BASE_URL` / `API_BASE_URL` env vars with hardcoded defaults (covers single-env use)
+  - Next step: `--env=staging` CLI flag + `environments/` folder with per-env config files
+  - Or: `.env.staging` / `.env.prod` files loaded via `python-dotenv`
+  - Interview angle: tradeoffs between env vars, config files, and pytest fixtures for environment switching

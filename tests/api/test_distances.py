@@ -1,8 +1,11 @@
 import pytest
+import allure
 from api.clients.distances_client import post_distance
 
 
 @pytest.mark.api
+@allure.feature("Distances")
+@allure.story("Calculate distance")
 def test_post_distance_returns_distance_data(session):
     response = post_distance(session, "KIX", "SYD")
     data = response.json()["data"]
@@ -15,6 +18,8 @@ def test_post_distance_returns_distance_data(session):
 
 
 @pytest.mark.api
+@allure.feature("Distances")
+@allure.story("Calculate distance")
 def test_post_distance_unit_relationship_is_correct(session):
     attrs = post_distance(session, "KIX", "SYD").json()["data"]["attributes"]
 
@@ -23,6 +28,8 @@ def test_post_distance_unit_relationship_is_correct(session):
 
 
 @pytest.mark.api
+@allure.feature("Distances")
+@allure.story("Calculate distance")
 def test_post_distance_is_symmetric(session):
     km_forward = post_distance(session, "KIX", "SYD").json()["data"]["attributes"]["kilometers"]
     km_reverse = post_distance(session, "SYD", "KIX").json()["data"]["attributes"]["kilometers"]
@@ -31,6 +38,8 @@ def test_post_distance_is_symmetric(session):
 
 
 @pytest.mark.api
+@allure.feature("Distances")
+@allure.story("Calculate distance")
 def test_post_distance_includes_airport_details(session):
     attributes = post_distance(session, "KIX", "SYD").json()["data"]["attributes"]
 
@@ -39,6 +48,8 @@ def test_post_distance_includes_airport_details(session):
 
 
 @pytest.mark.api
+@allure.feature("Distances")
+@allure.story("Validation")
 def test_post_distance_invalid_airport_returns_error(session):
     response = post_distance(session, "INVALID", "SYD")
 

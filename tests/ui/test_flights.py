@@ -1,9 +1,12 @@
 import pytest
+import allure
 from dataclasses import replace
 from ui.pages.home_page import HomePage
 
 
 @pytest.mark.ui
+@allure.feature("Flights")
+@allure.story("Search")
 def test_search_for_flight_returns_relevant_results(page):
     home = HomePage(page)
     home.open()
@@ -16,6 +19,8 @@ def test_search_for_flight_returns_relevant_results(page):
 
 
 @pytest.mark.ui
+@allure.feature("Flights")
+@allure.story("Select flight")
 def test_select_flight_reaches_purchase_page_for_correct_trip(page):
     home = HomePage(page)
     home.open()
@@ -29,6 +34,8 @@ def test_select_flight_reaches_purchase_page_for_correct_trip(page):
 
 
 @pytest.mark.ui
+@allure.feature("Flights")
+@allure.story("Purchase")
 def test_complete_purchase_flow_returns_booking_confirmation(page, default_passenger):
     home = HomePage(page)
     home.open()
@@ -43,6 +50,8 @@ def test_complete_purchase_flow_returns_booking_confirmation(page, default_passe
 
 
 @pytest.mark.ui
+@allure.feature("Flights")
+@allure.story("Purchase")
 def test_purchase_with_different_cardholder_returns_booking_confirmation(page, default_passenger):
     passenger = replace(default_passenger, name="Jane Smith", name_on_card="Jane Smith")
 
