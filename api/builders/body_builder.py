@@ -2,12 +2,8 @@ class BodyBuilder:
     def __init__(self):
         self._body = {}
 
-    def set(self, path: str, value) -> "BodyBuilder":
-        keys = path.split(".")
-        d = self._body
-        for key in keys[:-1]:
-            d = d.setdefault(key, {})
-        d[keys[-1]] = value
+    def set(self, key: str, value) -> "BodyBuilder":
+        self._body[key] = value
         return self
 
     def build(self) -> dict:
