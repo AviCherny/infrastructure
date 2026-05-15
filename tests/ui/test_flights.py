@@ -1,6 +1,6 @@
 import pytest
+from dataclasses import replace
 from ui.pages.home_page import HomePage
-from ui.pages.purchase_page import PassengerDetails
 
 
 @pytest.mark.ui
@@ -29,27 +29,30 @@ def test_select_flight_reaches_purchase_page_for_correct_trip(page):
 
 
 @pytest.mark.ui
-def test_complete_purchase_flow_returns_booking_confirmation(page):
-    details = PassengerDetails(
-        name="John Doe",
-        address="123 Main St",
-        city="Springfield",
-        state="IL",
-        zip_code="62701",
-        card_type="visa",
-        credit_card_number="4111111111111111",
-        credit_card_month="12",
-        credit_card_year="2027",
-        name_on_card="John Doe",
-    )
+def test_complete_purchase_flow_returns_booking_confirmation(page, default_passenger):
+    home = HomePage(page)
+    home.open()
+    results = home.search_flights("Boston", "Rome")
+    purchase = results.choose_flight(0)
+    confirmation = purchase.fill_and_submit(default_passenger)
+
+    # A booking was successfully created — the system returned a unique ID
+    assert "Thank you" in confirmation.get_title()
+    booking_id = confirmation.get_booking_id()
+    assert booking_id and booking_id.strip()
+
+
+@pytest.mark.ui
+def test_purchase_with_different_cardholder_returns_booking_confirmation(page, default_passenger):
+    passenger = replace(default_passenger, name="Jane Smith", name_on_card="Jane Smith")
 
     home = HomePage(page)
     home.open()
     results = home.search_flights("Boston", "Rome")
     purchase = results.choose_flight(0)
-    confirmation = purchase.fill_and_submit(details)
+    confirmation = purchase.fill_and_submit(passenger)
 
-    # A booking was successfully created — the system returned a unique ID
+    # Booking must succeed even when cardholder name differs from default
     assert "Thank you" in confirmation.get_title()
     booking_id = confirmation.get_booking_id()
     assert booking_id and booking_id.strip()
