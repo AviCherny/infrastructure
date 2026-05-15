@@ -20,6 +20,7 @@ class PassengerDetails:
 class PurchasePage:
     def __init__(self, page: Page):
         self.page = page
+        self.trip_summary = page.locator("h2")
         self.name = page.locator("#inputName")
         self.address = page.locator("#address")
         self.city = page.locator("#city")

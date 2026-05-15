@@ -5,6 +5,7 @@ from ui.pages.purchase_page import PurchasePage
 class ResultsPage:
     def __init__(self, page: Page):
         self.page = page
+        self.heading = page.locator("h3")
         self.flight_rows = page.locator("table tbody tr")
 
     def choose_flight(self, index: int = 0):
