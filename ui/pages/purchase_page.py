@@ -40,3 +40,6 @@ class PurchasePage:
         self.credit_card_year.fill(credit_card_year)
         self.name_on_card.fill(name_on_card)
         self.purchase_btn.click()
+        self.page.wait_for_url("**/confirmation.php")
+        from ui.pages.confirmation_page import ConfirmationPage
+        return ConfirmationPage(self.page)

@@ -13,6 +13,9 @@ class HomePage:
         self.page.goto(UI_BASE_URL)
 
     def search_flights(self, departure: str, destination: str):
+        from ui.pages.results_page import ResultsPage
         self.from_port.select_option(departure)
         self.to_port.select_option(destination)
         self.find_flights_btn.click()
+        self.page.wait_for_url("**/reserve.php")
+        return ResultsPage(self.page)
