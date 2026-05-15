@@ -1,4 +1,5 @@
 from playwright.sync_api import Page
+from ui.pages.confirmation_page import ConfirmationPage
 
 
 class PurchasePage:
@@ -41,5 +42,4 @@ class PurchasePage:
         self.name_on_card.fill(name_on_card)
         self.purchase_btn.click()
         self.page.wait_for_url("**/confirmation.php")
-        from ui.pages.confirmation_page import ConfirmationPage
         return ConfirmationPage(self.page)
