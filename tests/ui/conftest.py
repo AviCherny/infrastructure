@@ -1,3 +1,4 @@
+import os
 import pytest
 import allure
 from playwright.sync_api import sync_playwright
@@ -14,7 +15,7 @@ def pytest_runtest_makereport(item, call):
 @pytest.fixture(scope="session")
 def browser():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=os.getenv("CI") == "true")
         yield browser
 
 

@@ -45,7 +45,7 @@
 - [ ] README.md (setup, how to run tests, how to view Allure report)
 
 ## CI/CD
-- [ ] GitHub Actions workflow (runs tests + publishes Allure report)
+- [x] GitHub Actions workflow (runs tests + publishes Allure report)
 
 ## Environment Support
 - [ ] Discuss: how to scale env config beyond current `os.getenv()` pattern
