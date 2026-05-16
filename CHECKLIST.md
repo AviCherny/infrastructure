@@ -41,6 +41,9 @@
 - [x] Allure Report setup
 - [x] Screenshots on UI test failure
 
+## Documentation
+- [ ] README.md (setup, how to run tests, how to view Allure report)
+
 ## CI/CD
 - [ ] GitHub Actions workflow (runs tests + publishes Allure report)
 
