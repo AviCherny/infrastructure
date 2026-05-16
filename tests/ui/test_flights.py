@@ -21,6 +21,10 @@ def test_search_for_flight_returns_relevant_results(page):
 
 
 @pytest.mark.ui
+@pytest.mark.xfail(
+    strict=True,
+    reason="blazedemo.com bug: purchase page returns TLV→SFO defaults regardless of search input",
+)
 @allure.feature("Flights")
 @allure.story("Select flight")
 def test_select_flight_reaches_purchase_page_for_correct_trip(page):
