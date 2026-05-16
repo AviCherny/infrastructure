@@ -1,11 +1,12 @@
 from playwright.sync_api import Page
 from config import UI_BASE_URL
+from ui.pages.base_page import BasePage
 from ui.pages.results_page import ResultsPage
 
 
-class HomePage:
+class HomePage(BasePage):
     def __init__(self, page: Page):
-        self.page = page
+        super().__init__(page)
         self.from_port = page.locator("select[name='fromPort']")
         self.to_port = page.locator("select[name='toPort']")
         self.find_flights_btn = page.locator("input[value='Find Flights']")

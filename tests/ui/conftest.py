@@ -1,3 +1,4 @@
+import logging
 import os
 import pytest
 import allure
@@ -16,12 +17,16 @@ def pytest_runtest_makereport(item, call):
 def browser():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=os.getenv("CI") == "true")
+        logging.info("[browser] Chromium launched")
         yield browser
 
 
 @pytest.fixture
 def page(browser, request):
-    page = browser.new_page()
+    context = browser.new_context()
+    context.tracing.start(screenshots=True, snapshots=True, sources=True)
+    page = context.new_page()
+    logging.info(f"[page] New page opened for {request.node.name}")
     yield page
     if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
         allure.attach(
@@ -29,7 +34,14 @@ def page(browser, request):
             name="screenshot_on_failure",
             attachment_type=allure.attachment_type.PNG,
         )
+        os.makedirs("traces", exist_ok=True)
+        trace_path = f"traces/{request.node.name}.zip"
+        context.tracing.stop(path=trace_path)
+        logging.info(f"[page] Trace saved → {trace_path} (open at trace.playwright.dev)")
+    else:
+        context.tracing.stop()
     page.close()
+    context.close()
 
 
 @pytest.fixture

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from playwright.sync_api import Page
+from ui.pages.base_page import BasePage
 from ui.pages.confirmation_page import ConfirmationPage
 
 
@@ -17,9 +18,9 @@ class PassengerDetails:
     name_on_card: str
 
 
-class PurchasePage:
+class PurchasePage(BasePage):
     def __init__(self, page: Page):
-        self.page = page
+        super().__init__(page)
         self._trip_summary = page.locator("h2")
         self._name = page.locator("#inputName")
         self._address = page.locator("#address")

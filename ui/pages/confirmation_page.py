@@ -1,9 +1,10 @@
 from playwright.sync_api import Page
+from ui.pages.base_page import BasePage
 
 
-class ConfirmationPage:
+class ConfirmationPage(BasePage):
     def __init__(self, page: Page):
-        self.page = page
+        super().__init__(page)
         self.title = page.locator("h1")
         self.booking_id = page.locator("tr", has=page.locator("td", has_text="Id")).locator("td").nth(1)
 

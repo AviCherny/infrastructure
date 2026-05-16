@@ -1,10 +1,11 @@
 from playwright.sync_api import Page
+from ui.pages.base_page import BasePage
 from ui.pages.purchase_page import PurchasePage
 
 
-class ResultsPage:
+class ResultsPage(BasePage):
     def __init__(self, page: Page):
-        self.page = page
+        super().__init__(page)
         self._heading = page.locator("h3")
         self._flight_rows = page.locator("table tbody tr")
 
