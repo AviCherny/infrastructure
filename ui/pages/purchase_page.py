@@ -20,7 +20,7 @@ class PassengerDetails:
 class PurchasePage:
     def __init__(self, page: Page):
         self.page = page
-        self.trip_summary = page.locator("h2")
+        self._trip_summary = page.locator("h2")
         self.name = page.locator("#inputName")
         self.address = page.locator("#address")
         self.city = page.locator("#city")
@@ -32,6 +32,9 @@ class PurchasePage:
         self.credit_card_year = page.locator("#creditCardYear")
         self.name_on_card = page.locator("#nameOnCard")
         self.purchase_btn = page.locator("input[value='Purchase Flight']")
+
+    def get_trip_summary(self) -> str:
+        return self._trip_summary.inner_text()
 
     def fill_and_submit(self, details: PassengerDetails):
         self.name.fill(details.name)

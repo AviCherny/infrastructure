@@ -13,9 +13,10 @@ def test_search_for_flight_returns_relevant_results(page):
     results = home.search_flights("Boston", "Rome")
 
     # The results heading must reflect the searched route — not just any page
-    assert "Boston" in results.heading.inner_text()
-    assert "Rome" in results.heading.inner_text()
-    assert results.flight_rows.count() > 0
+    heading = results.get_heading()
+    assert "Boston" in heading
+    assert "Rome" in heading
+    assert results.get_flight_count() > 0
 
 
 @pytest.mark.ui
@@ -28,7 +29,7 @@ def test_select_flight_reaches_purchase_page_for_correct_trip(page):
     purchase = results.choose_flight(0)
 
     # The purchase page must confirm the trip the user actually selected
-    summary = purchase.trip_summary.inner_text()
+    summary = purchase.get_trip_summary()
     assert "Boston" in summary
     assert "Rome" in summary
 
