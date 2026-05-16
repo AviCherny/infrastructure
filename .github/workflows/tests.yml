@@ -37,6 +37,15 @@ jobs:
           path: allure-results
           retention-days: 1
 
+      - name: Upload Playwright traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: traces/
+          if-no-files-found: ignore
+          retention-days: 3
+
   report:
     needs: test
     if: always()
@@ -68,8 +77,8 @@ jobs:
           path: allure-report
 
   deploy:
-    needs: report
-    if: always() && github.ref == 'refs/heads/main'
+    needs: [test, report]
+    if: needs.test.result == 'success' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       pages: write

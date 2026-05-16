@@ -28,20 +28,22 @@ def page(browser, request):
     page = context.new_page()
     logging.info(f"[page] New page opened for {request.node.name}")
     yield page
-    if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
-        allure.attach(
-            page.screenshot(),
-            name="screenshot_on_failure",
-            attachment_type=allure.attachment_type.PNG,
-        )
-        os.makedirs("traces", exist_ok=True)
-        trace_path = f"traces/{request.node.name}.zip"
-        context.tracing.stop(path=trace_path)
-        logging.info(f"[page] Trace saved → {trace_path} (open at trace.playwright.dev)")
-    else:
-        context.tracing.stop()
-    page.close()
-    context.close()
+    try:
+        if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+            allure.attach(
+                page.screenshot(),
+                name="screenshot_on_failure",
+                attachment_type=allure.attachment_type.PNG,
+            )
+            os.makedirs("traces", exist_ok=True)
+            trace_path = f"traces/{request.node.name}.zip"
+            context.tracing.stop(path=trace_path)
+            logging.info(f"[page] Trace saved → {trace_path} (open at trace.playwright.dev)")
+        else:
+            context.tracing.stop()
+    finally:
+        page.close()
+        context.close()
 
 
 @pytest.fixture
