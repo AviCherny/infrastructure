@@ -2,6 +2,7 @@ import pytest
 import allure
 from dataclasses import replace
 from ui.pages.home_page import HomePage
+import ui.flows as flows
 
 
 @pytest.mark.ui
@@ -23,9 +24,7 @@ def test_search_for_flight_returns_relevant_results(page):
 @allure.feature("Flights")
 @allure.story("Select flight")
 def test_select_flight_reaches_purchase_page_for_correct_trip(page):
-    home = HomePage(page)
-    home.open()
-    results = home.search_flights("Boston", "Rome")
+    results = flows.search_flights(page, "Boston", "Rome")
     purchase = results.choose_flight(0)
 
     # The purchase page must confirm the trip the user actually selected
@@ -38,9 +37,7 @@ def test_select_flight_reaches_purchase_page_for_correct_trip(page):
 @allure.feature("Flights")
 @allure.story("Purchase")
 def test_complete_purchase_flow_returns_booking_confirmation(page, default_passenger):
-    home = HomePage(page)
-    home.open()
-    results = home.search_flights("Boston", "Rome")
+    results = flows.search_flights(page, "Boston", "Rome")
     purchase = results.choose_flight(0)
     confirmation = purchase.fill_and_submit(default_passenger)
 
@@ -56,9 +53,7 @@ def test_complete_purchase_flow_returns_booking_confirmation(page, default_passe
 def test_purchase_with_different_cardholder_returns_booking_confirmation(page, default_passenger):
     passenger = replace(default_passenger, name="Jane Smith", name_on_card="Jane Smith")
 
-    home = HomePage(page)
-    home.open()
-    results = home.search_flights("Boston", "Rome")
+    results = flows.search_flights(page, "Boston", "Rome")
     purchase = results.choose_flight(0)
     confirmation = purchase.fill_and_submit(passenger)
 
