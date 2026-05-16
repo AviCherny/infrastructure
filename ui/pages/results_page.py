@@ -6,8 +6,8 @@ from ui.pages.purchase_page import PurchasePage
 class ResultsPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
-        self._heading = page.locator("h3")
-        self._flight_rows = page.locator("table tbody tr")
+        self._heading = page.get_by_role("heading", level=3)
+        self._flight_rows = page.get_by_role("row").filter(has=page.locator("input[value='Choose This Flight']"))
 
     def get_heading(self) -> str:
         return self._heading.inner_text()
