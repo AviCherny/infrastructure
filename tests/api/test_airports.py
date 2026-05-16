@@ -19,12 +19,11 @@ def test_get_airports_returns_list(session):
 @pytest.mark.api
 @allure.feature("Airports")
 @allure.story("Get all airports")
-def test_get_airports_iata_codes_are_valid(airports_data):
-    for airport in airports_data:
-        # IATA codes are always 3 uppercase letters
-        assert re.match(r"^[A-Z]{3}$", airport["id"]), f"Invalid IATA: {airport['id']}"
-        # id and iata attribute must stay in sync — separate DB fields that can drift
-        assert airport["id"] == airport["attributes"]["iata"]
+def test_get_airports_iata_codes_are_valid(airport):
+    # IATA codes are always 3 uppercase letters
+    assert re.match(r"^[A-Z]{3}$", airport["id"]), f"Invalid IATA: {airport['id']}"
+    # id and iata attribute must stay in sync — separate DB fields that can drift
+    assert airport["id"] == airport["attributes"]["iata"]
 
 
 @pytest.mark.api

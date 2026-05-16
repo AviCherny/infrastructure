@@ -3,7 +3,23 @@ import logging
 import pytest
 import requests
 import allure
-from api.clients.airports_client import get_airports
+from api.builders.url_builder import airports_url
+
+_airports_cache: list | None = None
+
+
+def _fetch_airports() -> list:
+    """Fetch airports once and cache — called at collection time and by fixtures."""
+    global _airports_cache
+    if _airports_cache is None:
+        _airports_cache = requests.get(airports_url()).json()["data"]
+    return _airports_cache
+
+
+def pytest_generate_tests(metafunc):
+    if "airport" in metafunc.fixturenames:
+        airports = _fetch_airports()
+        metafunc.parametrize("airport", airports, ids=[a["id"] for a in airports])
 
 
 def _log_response(response: requests.Response, *args, **kwargs):
@@ -33,7 +49,7 @@ def session():
 
 
 @pytest.fixture(scope="session")
-def airports_data(session):
-    data = get_airports(session).json()["data"]
-    logging.info(f"[airports_data] Fetched {len(data)} airports")
+def airports_data():
+    data = _fetch_airports()
+    logging.info(f"[airports_data] Using {len(data)} airports")
     return data
