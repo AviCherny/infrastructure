@@ -32,6 +32,7 @@ def page(browser, request):
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     page = context.new_page()
     page.set_default_timeout(PLAYWRIGHT_TIMEOUT)
+    page.on("console", lambda msg: logging.error(f"[Browser Console Error] {msg.text}") if msg.type == "error" else None)
     logging.info(f"[page] New page opened for {request.node.name}")
     yield page
     failed = hasattr(request.node, "rep_call") and request.node.rep_call.failed
