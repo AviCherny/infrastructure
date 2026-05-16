@@ -4,6 +4,7 @@ import pytest
 import allure
 from pathlib import Path
 from playwright.sync_api import sync_playwright
+from config import PLAYWRIGHT_HEADLESS, PLAYWRIGHT_TIMEOUT, PLAYWRIGHT_VIDEO_DIR, PLAYWRIGHT_TRACE_DIR
 from ui.pages.purchase_page import PassengerDetails
 
 
@@ -17,7 +18,7 @@ def pytest_runtest_makereport(item, call):
 @pytest.fixture(scope="session")
 def browser():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=os.getenv("CI") == "true")
+        browser = p.chromium.launch(headless=PLAYWRIGHT_HEADLESS)
         logging.info("[browser] Chromium launched")
         yield browser
 
@@ -26,11 +27,11 @@ def browser():
 def page(browser, request):
     context = browser.new_context(
         accept_downloads=True,
-        record_video_dir="videos/",
+        record_video_dir=PLAYWRIGHT_VIDEO_DIR,
     )
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     page = context.new_page()
-    page.set_default_timeout(15_000)
+    page.set_default_timeout(PLAYWRIGHT_TIMEOUT)
     logging.info(f"[page] New page opened for {request.node.name}")
     yield page
     failed = hasattr(request.node, "rep_call") and request.node.rep_call.failed
@@ -41,8 +42,8 @@ def page(browser, request):
                 name="screenshot_on_failure",
                 attachment_type=allure.attachment_type.PNG,
             )
-            os.makedirs("traces", exist_ok=True)
-            trace_path = f"traces/{request.node.name}.zip"
+            os.makedirs(PLAYWRIGHT_TRACE_DIR, exist_ok=True)
+            trace_path = f"{PLAYWRIGHT_TRACE_DIR}/{request.node.name}.zip"
             context.tracing.stop(path=trace_path)
             logging.info(f"[page] Trace saved → {trace_path} (open at trace.playwright.dev)")
         else:
