@@ -49,5 +49,5 @@ class PurchasePage(BasePage):
         self._credit_card_year.fill(details.credit_card_year)
         self._name_on_card.fill(details.name_on_card)
         self._purchase_btn.click()
-        self.page.wait_for_url("**/confirmation.php")
+        self.wait_for_url("**/confirmation.php")
         return ConfirmationPage(self.page)
