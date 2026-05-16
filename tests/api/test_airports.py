@@ -29,9 +29,7 @@ def test_get_airports_iata_codes_are_valid(airport):
 @pytest.mark.api
 @allure.feature("Airports")
 @allure.story("Get all airports")
-def test_get_airports_item_has_expected_fields(airports_data):
-    airport = airports_data[0]
-
+def test_airport_item_has_expected_fields(airport):
     assert isinstance(airport["id"], str) and len(airport["id"]) > 0
     assert airport["type"] == "airport"
     assert "name" in airport["attributes"]

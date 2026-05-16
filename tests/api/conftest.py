@@ -9,7 +9,7 @@ _airports_cache: list | None = None
 
 
 def _fetch_airports() -> list:
-    """Fetch airports once and cache — called at collection time and by fixtures."""
+    """Fetch airports once and cache for parametrization at collection time."""
     global _airports_cache
     if _airports_cache is None:
         _airports_cache = requests.get(airports_url()).json()["data"]
@@ -46,10 +46,3 @@ def session():
         s.hooks["response"].append(_log_response)
         logging.info("[session] HTTP session started")
         yield s
-
-
-@pytest.fixture(scope="session")
-def airports_data():
-    data = _fetch_airports()
-    logging.info(f"[airports_data] Using {len(data)} airports")
-    return data
