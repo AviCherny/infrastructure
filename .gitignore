@@ -7,4 +7,6 @@ __pycache__/
 playwright-report/
 test-results/
 allure-results/
+videos/
+traces/
 .vscode/

@@ -2,6 +2,7 @@ import logging
 import os
 import pytest
 import allure
+from pathlib import Path
 from playwright.sync_api import sync_playwright
 from ui.pages.purchase_page import PassengerDetails
 
@@ -23,13 +24,18 @@ def browser():
 
 @pytest.fixture
 def page(browser, request):
-    context = browser.new_context()
+    context = browser.new_context(
+        accept_downloads=True,
+        record_video_dir="videos/",
+    )
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     page = context.new_page()
+    page.set_default_timeout(15_000)
     logging.info(f"[page] New page opened for {request.node.name}")
     yield page
+    failed = hasattr(request.node, "rep_call") and request.node.rep_call.failed
     try:
-        if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+        if failed:
             allure.attach(
                 page.screenshot(),
                 name="screenshot_on_failure",
@@ -42,8 +48,18 @@ def page(browser, request):
         else:
             context.tracing.stop()
     finally:
+        video = page.video
         page.close()
         context.close()
+        if video:
+            if failed:
+                allure.attach(
+                    Path(video.path()).read_bytes(),
+                    name="video_on_failure",
+                    attachment_type=allure.attachment_type.WEBM,
+                )
+            else:
+                video.delete()
 
 
 @pytest.fixture
