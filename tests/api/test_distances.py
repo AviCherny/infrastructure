@@ -1,6 +1,8 @@
 import pytest
 import allure
 from api.clients.distances_client import post_distance
+from api.builders.body_builder import BodyBuilder
+from api.builders.url_builder import distances_url
 
 
 @pytest.mark.api
@@ -52,5 +54,35 @@ def test_post_distance_includes_airport_details(session):
 @allure.story("Validation")
 def test_post_distance_invalid_airport_returns_error(session):
     response = post_distance(session, "INVALID", "SYD")
+
+    assert response.status_code == 422
+
+
+@pytest.mark.api
+@allure.feature("Distances")
+@allure.story("Validation")
+def test_post_distance_missing_from_field_returns_error(session):
+    body = BodyBuilder().set("to", "SYD").build()
+    response = session.post(distances_url(), json=body)
+
+    assert response.status_code == 422
+
+
+@pytest.mark.api
+@allure.feature("Distances")
+@allure.story("Validation")
+def test_post_distance_missing_to_field_returns_error(session):
+    body = BodyBuilder().set("from", "KIX").build()
+    response = session.post(distances_url(), json=body)
+
+    assert response.status_code == 422
+
+
+@pytest.mark.api
+@allure.feature("Distances")
+@allure.story("Validation")
+def test_post_distance_empty_body_returns_error(session):
+    body = BodyBuilder().build()
+    response = session.post(distances_url(), json=body)
 
     assert response.status_code == 422
