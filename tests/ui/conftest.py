@@ -30,8 +30,10 @@ def page(browser, request):
         record_video_dir=PLAYWRIGHT_VIDEO_DIR,
     )
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
+    console_errors: list[str] = []
     page = context.new_page()
     page.set_default_timeout(PLAYWRIGHT_TIMEOUT)
+    page.on("console", lambda msg: console_errors.append(msg.text) if msg.type == "error" else None)
     logging.info(f"[page] New page opened for {request.node.name}")
     yield page
     failed = hasattr(request.node, "rep_call") and request.node.rep_call.failed
@@ -42,6 +44,12 @@ def page(browser, request):
                 name="screenshot_on_failure",
                 attachment_type=allure.attachment_type.PNG,
             )
+            if console_errors:
+                allure.attach(
+                    "\n".join(console_errors),
+                    name="console_errors",
+                    attachment_type=allure.attachment_type.TEXT,
+                )
             os.makedirs(PLAYWRIGHT_TRACE_DIR, exist_ok=True)
             trace_path = f"{PLAYWRIGHT_TRACE_DIR}/{request.node.name}.zip"
             context.tracing.stop(path=trace_path)
