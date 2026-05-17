@@ -36,7 +36,13 @@ def page(browser, request):
     page.on("console", lambda msg: console_errors.append(msg.text) if msg.type == "error" else None)
     logging.info(f"[page] New page opened for {request.node.name}")
     yield page
-    failed = hasattr(request.node, "rep_call") and request.node.rep_call.failed
+    rep_setup = getattr(request.node, "rep_setup", None)
+    rep_call = getattr(request.node, "rep_call", None)
+    failed = (
+        (rep_setup is not None and rep_setup.failed)
+        or (rep_call is not None and rep_call.failed)
+        or (rep_call is not None and hasattr(rep_call, "wasxfail") and not rep_call.passed)
+    )
     try:
         if failed:
             allure.attach(
