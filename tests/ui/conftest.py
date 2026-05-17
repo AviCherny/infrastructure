@@ -2,10 +2,12 @@ import logging
 import os
 import pytest
 import allure
+from datetime import datetime
 from pathlib import Path
+from uuid import uuid4
 from playwright.sync_api import sync_playwright
 from config import PLAYWRIGHT_HEADLESS, PLAYWRIGHT_TIMEOUT, PLAYWRIGHT_VIDEO_DIR, PLAYWRIGHT_TRACE_DIR
-from ui.pages.purchase_page import PassengerDetails
+from tests.ui.test_data import make_passenger
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
@@ -77,17 +79,11 @@ def page(browser, request):
                 video.delete()
 
 
+@pytest.fixture(scope="session")
+def run_prefix():
+    return f"TEST_{datetime.now().strftime('%Y%m%d')}_{uuid4().hex[:6]}"
+
+
 @pytest.fixture
-def default_passenger():
-    return PassengerDetails(
-        name="John Doe",
-        address="123 Main St",
-        city="Springfield",
-        state="IL",
-        zip_code="62701",
-        card_type="visa",
-        credit_card_number="4111111111111111",
-        credit_card_month="12",
-        credit_card_year="2027",
-        name_on_card="John Doe",
-    )
+def default_passenger(run_prefix):
+    return make_passenger(run_prefix)
