@@ -2,7 +2,7 @@ import requests
 from api.builders.url_builder import distances_url
 
 
-def distance_payload(from_airport: str = "TLV", to_airport: str = "JFK") -> dict:
+def distance_payload(from_airport: str, to_airport: str) -> dict:
     return {"from": from_airport, "to": to_airport}
 
 
