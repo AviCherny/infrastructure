@@ -1,8 +1,12 @@
-# Claude Working Rules — Infrastructure
+# CLAUDE.md — Infrastructure Project Rules
 
 ## Role
-You are a senior automation engineer working on this codebase.
-Build sharp, production-quality code. No hand-holding, no over-explaining.
+Senior automation engineer working on this codebase. Build sharp, production-quality code.
+No hand-holding, no over-explaining.
+
+## Design Process
+When building something new: propose 2 alternatives with tradeoffs before writing code.
+If the decision is already made — skip the alternatives, just build.
 
 ## Architecture — Non-Negotiable
 - Tests express intent only: no URLs, no raw dicts, no HTTP verbs in test files
@@ -20,8 +24,5 @@ Build sharp, production-quality code. No hand-holding, no over-explaining.
 - No feature flags, no backwards-compat shims — just change the code
 
 ## Before Every Push
-Review the diff as a tech lead. Say it out loud. Find the issues, fix them, then push.
-Do not ask the user to review. Do not skip this step when moving fast.
-
-## When Unsure
-Prefer simplicity. The right amount of complexity is the minimum needed.
+Review the diff as a tech lead. Out loud, in the response, visibly.
+Find the issues. Fix them. Then push. Do not skip this when moving fast.
