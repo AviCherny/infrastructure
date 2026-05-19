@@ -1,9 +1,9 @@
 # Project Context
 
 ## Purpose
-- Learning automation architecture
-- Interview preparation
+- Interview preparation and home assignment submission
 - Reusable framework foundation
+- Demonstration of real-world automation patterns
 
 ## Tech Stack
 - Python
@@ -35,11 +35,13 @@ infrastructure/
 │   ├── clients/
 │   └── builders/
 ├── ui/
-│   └── pages/
+│   ├── pages/
+│   └── flows.py
 ├── tests/
 │   ├── ui/
+│   │   └── conftest.py
 │   └── api/
-├── conftest.py
+│       └── conftest.py
 ├── config.py
 ├── requirements.txt
 ├── pytest.ini
@@ -53,16 +55,18 @@ Page Object classes. One file per page (e.g., `home_page.py`, `results_page.py`)
 Useful immediately — BlazeDemo has at least 3 distinct pages.
 
 **`api/clients/`**
-One client class per API resource group (e.g., `airports_client.py`, `distances_client.py`). Wraps `requests`, returns raw responses. No test logic here.
+One module per API resource group (e.g., `airports_client.py`, `distances_client.py`). Wraps `requests`, returns raw responses. No test logic here.
 Useful immediately — AirportGap has multiple endpoints.
 
 **`tests/ui/` and `tests/api/`**
 The actual test files. Separated so you can run `pytest tests/ui` or `pytest tests/api` independently.
 Useful immediately.
 
-**`conftest.py`** (root level)
-Pytest fixtures: browser setup, base URL injection, HTTP session setup. The single place for shared setup/teardown.
-Useful immediately — every test needs a browser or HTTP client.
+**`tests/api/conftest.py`**
+API fixtures: session-scoped `requests.Session` with shared headers and Allure response hook.
+
+**`tests/ui/conftest.py`**
+UI fixtures: session-scoped browser, per-test page context with failure-only video/trace/screenshot capture.
 
 **`config.py`**
 Base URLs, environment settings, any top-level constants. A flat file, not a class hierarchy.
@@ -77,7 +81,7 @@ Useful immediately.
 | What | Why not |
 |---|---|
 | `utils/` or `helpers/` | Generic utility folders become dumping grounds. Add only when 3+ files need the same function. |
-| `base/` classes (BasePage, BaseClient) | Only create when 2+ pages/clients share real logic. Don't pre-build inheritance. |
+| `BaseClient` | No shared logic across clients yet — add only when two clients repeat the same pattern. |
 | `models/` or `schemas/` | Only needed when validating complex response shapes. |
 | `data/` or `fixtures/json/` | Only when test data management becomes a real problem. |
 | `components/` inside `ui/` | Only if a UI element is used across 3+ pages. |
