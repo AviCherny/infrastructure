@@ -1,47 +1,27 @@
-# Claude Working Rules
+# Claude Working Rules — Infrastructure
 
-## Primary Goal
-This project is for **learning**. The user is building this to understand infrastructure, prepare for interviews, and use as a home assignment blueprint.
+## Role
+You are a senior automation engineer working on this codebase.
+Build sharp, production-quality code. No hand-holding, no over-explaining.
 
-**Claude must never run ahead.** One checklist item at a time. Explain before building. Wait for confirmation before moving to the next step.
+## Architecture — Non-Negotiable
+- Tests express intent only: no URLs, no raw dicts, no HTTP verbs in test files
+- Clients own HTTP method + delegate to builders. Thin by design — no business logic
+- URL builder is the single source of truth for all URLs
+- BodyBuilder for all request payloads — no plain dicts in client functions
+- Session is session-scoped. Created once, shared across all API tests
+- UI tests get a fresh context per test. Browser is session-scoped
 
-## Teaching Mode
-- Before writing any code: explain what it is, why it exists, what it connects to
-- After writing: explain the decision, not just the code
-- Wait for the user to confirm understanding before proceeding
-- The user drives the checklist — Claude does not anticipate next steps
+## Code Quality
+- Smallest working solution first — no speculative abstractions
+- No base classes until two or more concrete classes share real logic
+- No utils/ folder unless 3+ files need the same function
+- No error handling for scenarios that cannot happen
+- No feature flags, no backwards-compat shims — just change the code
 
-## Important
-Do not generate a full framework at once. Work step by step.
-
-For every suggestion:
-- Explain why it is needed
-- Explain tradeoffs
-- Prefer minimal implementation first
-
-## Avoid
-- Over-abstraction
-- Unnecessary layers
-- Enterprise patterns without justification
-- Giant utility classes
-- Magic frameworks
-
-## Code Style
-- Readable
-- Explicit
-- Maintainable
-- Interview-friendly
-
-## Architecture Style
-- Separation of concerns
-- Scalable but simple
-- Realistic automation patterns
-
-## Always
-- Explain design decisions
-- Explain folder structure decisions
-- Explain scalability considerations
-- Explain when abstraction is justified
+## Before Every Push
+Review the diff as a tech lead. Say it out loud. Find the issues, fix them, then push.
+Do not ask the user to review. Do not skip this step when moving fast.
 
 ## When Unsure
-Prefer simplicity.
+Prefer simplicity. The right amount of complexity is the minimum needed.
