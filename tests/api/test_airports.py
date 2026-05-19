@@ -2,6 +2,7 @@ import re
 import pytest
 import allure
 from api.clients.airports_client import get_airports, get_airport
+from tests.api.test_data import KNOWN_AIRPORT_IDS
 
 
 @pytest.mark.api
@@ -40,7 +41,7 @@ def test_airport_item_has_expected_fields(airport):
 @pytest.mark.api
 @allure.feature("Airports")
 @allure.story("Get airport by ID")
-@pytest.mark.parametrize("airport_id", ["KIX", "SYD", "JFK", "LHR"])
+@pytest.mark.parametrize("airport_id", KNOWN_AIRPORT_IDS)
 def test_get_airport_by_id_returns_correct_airport(session, airport_id):
     response = get_airport(session, airport_id)
     airport = response.json()["data"]
