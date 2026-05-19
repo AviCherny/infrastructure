@@ -3,23 +3,6 @@ import logging
 import pytest
 import requests
 import allure
-from api.builders.url_builder import airports_url
-
-_airports_cache: list | None = None
-
-
-def _fetch_airports() -> list:
-    """Fetch airports once and cache for parametrization at collection time."""
-    global _airports_cache
-    if _airports_cache is None:
-        _airports_cache = requests.get(airports_url()).json()["data"]
-    return _airports_cache
-
-
-def pytest_generate_tests(metafunc):
-    if "airport" in metafunc.fixturenames:
-        airports = _fetch_airports()
-        metafunc.parametrize("airport", airports, ids=[a["id"] for a in airports])
 
 
 def _log_response(response: requests.Response, *args, **kwargs):

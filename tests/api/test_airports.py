@@ -18,22 +18,26 @@ def test_get_airports_returns_list(session):
 @pytest.mark.api
 @allure.feature("Airports")
 @allure.story("Get all airports")
-def test_get_airports_iata_codes_are_valid(airport):
-    # IATA codes are always 3 uppercase letters
-    assert re.match(r"^[A-Z]{3}$", airport["id"]), f"Invalid IATA: {airport['id']}"
-    # id and iata attribute must stay in sync — separate DB fields that can drift
-    assert airport["id"] == airport["attributes"]["iata"]
+def test_get_airports_iata_codes_are_valid(session):
+    airports = get_airports(session).json()["data"]
+    for airport in airports:
+        # IATA codes are always 3 uppercase letters
+        assert re.match(r"^[A-Z]{3}$", airport["id"]), f"Invalid IATA: {airport['id']}"
+        # id and iata attribute must stay in sync — separate DB fields that can drift
+        assert airport["id"] == airport["attributes"]["iata"]
 
 
 @pytest.mark.api
 @allure.feature("Airports")
 @allure.story("Get all airports")
-def test_airport_item_has_expected_fields(airport):
-    assert isinstance(airport["id"], str) and len(airport["id"]) > 0
-    assert airport["type"] == "airport"
-    assert "name" in airport["attributes"]
-    assert "iata" in airport["attributes"]
-    assert "country" in airport["attributes"]
+def test_airport_item_has_expected_fields(session):
+    airports = get_airports(session).json()["data"]
+    for airport in airports:
+        assert isinstance(airport["id"], str) and len(airport["id"]) > 0
+        assert airport["type"] == "airport"
+        assert "name" in airport["attributes"]
+        assert "iata" in airport["attributes"]
+        assert "country" in airport["attributes"]
 
 
 @pytest.mark.api
