@@ -17,7 +17,7 @@ Test file
    └── Client function       (airports_client, distances_client)
          └── URL builder     (single source of truth for all URLs)
          └── Body builder    (constructs request payloads via chaining)
-               └── requests.Session (shared headers, response hooks)
+         └── requests.Session (shared headers, response hooks)
 ```
 
 **Test file** — expresses intent only. No URLs, no raw dicts, no HTTP verbs. A test should read like a spec.

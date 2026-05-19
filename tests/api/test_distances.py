@@ -1,6 +1,12 @@
 import pytest
 import allure
-from api.clients.distances_client import post_distance, distance_payload
+from api.clients.distances_client import (
+    post_distance,
+    distance_payload,
+    distance_payload_missing_from,
+    distance_payload_missing_to,
+    empty_distance_payload,
+)
 from tests.api.test_data import FROM_AIRPORT, TO_AIRPORT
 
 
@@ -61,7 +67,7 @@ def test_post_distance_invalid_airport_returns_error(session):
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_missing_from_field_returns_error(session):
-    response = post_distance(session, {"to": TO_AIRPORT})
+    response = post_distance(session, distance_payload_missing_from(TO_AIRPORT))
 
     assert response.status_code == 422
 
@@ -70,7 +76,7 @@ def test_post_distance_missing_from_field_returns_error(session):
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_missing_to_field_returns_error(session):
-    response = post_distance(session, {"from": FROM_AIRPORT})
+    response = post_distance(session, distance_payload_missing_to(FROM_AIRPORT))
 
     assert response.status_code == 422
 
@@ -79,6 +85,6 @@ def test_post_distance_missing_to_field_returns_error(session):
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_empty_body_returns_error(session):
-    response = post_distance(session, {})
+    response = post_distance(session, empty_distance_payload())
 
     assert response.status_code == 422
