@@ -46,8 +46,8 @@ Testing against a fixed set of well-known airports (KIX, SYD, JFK, LHR) gives de
 **Why Page Object Model for UI?**
 Tests that contain Playwright selectors break every time the UI changes. Page Objects absorb the change — the selector is updated in one place, and all tests that use that page continue to work.
 
-**Why record video and trace only on failure?**
-Storing artifacts for every test run wastes space and makes the report noisy. Capturing them only on failure means every failed test in CI has everything needed to reproduce the issue: a video replay, a Playwright trace, a screenshot, and console errors.
+**Why retain video and trace only on failure?**
+Video and trace are always recorded during the test. On success they are discarded — video is deleted, trace is stopped without saving. On failure they are attached to the Allure report, so every failed test in CI has everything needed to reproduce the issue: a video replay, a Playwright trace, a screenshot, and console errors.
 
 ---
 
