@@ -1,3 +1,4 @@
+import allure
 from playwright.sync_api import Page
 from ui.pages.base_page import BasePage
 from ui.pages.purchase_page import PurchasePage
@@ -15,6 +16,7 @@ class ResultsPage(BasePage):
     def get_flight_count(self) -> int:
         return self._flight_rows.count()
 
+    @allure.step("Choose flight #{index}")
     def choose_flight(self, index: int = 0):
         self._flight_rows.nth(index).locator("input[value='Choose This Flight']").click()
         self.wait_for_url("**/purchase.php")

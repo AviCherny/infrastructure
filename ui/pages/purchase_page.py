@@ -1,3 +1,4 @@
+import allure
 from dataclasses import dataclass
 from playwright.sync_api import Page
 from ui.pages.base_page import BasePage
@@ -37,6 +38,7 @@ class PurchasePage(BasePage):
     def get_trip_summary(self) -> str:
         return self._trip_summary.inner_text()
 
+    @allure.step("Fill purchase form and submit")
     def fill_and_submit(self, details: PassengerDetails):
         self._name.fill(details.name)
         self._address.fill(details.address)

@@ -1,3 +1,4 @@
+import allure
 from playwright.sync_api import Page
 from config import UI_BASE_URL
 from ui.pages.base_page import BasePage
@@ -11,9 +12,11 @@ class HomePage(BasePage):
         self.to_port = page.locator("select[name='toPort']")
         self.find_flights_btn = page.locator("input[value='Find Flights']")
 
+    @allure.step("Open home page")
     def open(self):
         self.navigate_to(UI_BASE_URL)
 
+    @allure.step("Search flights: {departure} → {destination}")
     def search_flights(self, departure: str, destination: str):
         self.from_port.select_option(departure)
         self.to_port.select_option(destination)
