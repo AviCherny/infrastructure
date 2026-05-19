@@ -7,4 +7,7 @@ class BodyBuilder:
         return self
 
     def build(self) -> dict:
-        return self._body.copy()
+        return {
+            key: value.build() if isinstance(value, BodyBuilder) else value
+            for key, value in self._body.items()
+        }
