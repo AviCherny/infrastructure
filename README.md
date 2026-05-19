@@ -1,6 +1,6 @@
 # Infrastructure — Automation Framework
 
-A Python-based test automation framework covering API and UI testing, built for learning, interview preparation, and as a reusable foundation.
+A Python-based test automation framework covering API and UI testing, built as a reusable foundation demonstrating real-world automation patterns.
 
 **Targets:**
 - API: [AirportGap API](https://airportgap.com/api)
@@ -28,10 +28,11 @@ A Python-based test automation framework covering API and UI testing, built for 
 ```
 infrastructure/
 ├── api/
-│   ├── clients/          # One class per API resource (airports, distances)
+│   ├── clients/          # One module per API resource (airports, distances)
 │   └── builders/         # URL and request body construction
 ├── ui/
-│   └── pages/            # Page Object classes (one file per page)
+│   ├── pages/            # Page Object classes (one file per page)
+│   └── flows.py          # Multi-step user flows composed from page actions
 ├── tests/
 │   ├── api/              # API test files + conftest
 │   └── ui/               # UI test files + conftest
@@ -119,8 +120,8 @@ The workflow also uploads the report as an artifact (retained for 14 days) under
 **UI/API separation — run independently, fail independently**
 UI tests fail due to browser rendering and navigation timing. API tests fail due to contracts and data. Mixing them means a flaky UI test can mask a real API regression. Keeping them separate lets each layer be run, debugged, and extended without touching the other.
 
-**No base classes until two or more concrete classes share real logic**
-A base class created too early locks in assumptions before you understand the real commonality. The cost of adding one later is low. The cost of ripping out a wrong one is high.
+**Base classes are introduced only when two or more concrete classes share real logic**
+A base class created too early locks in assumptions before you understand the real commonality. `BasePage` exists because all page classes share navigation and wait logic — that's the signal. Without that signal, the abstraction doesn't get added.
 
 **No utility folders unless three or more files need the same function**
 A `utils/` folder is where code goes to become invisible. If only one file needs a helper, the helper lives there. If two need it, it moves when the third appears — not before.
