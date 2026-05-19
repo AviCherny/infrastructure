@@ -1,13 +1,10 @@
 import requests
 from api.builders.url_builder import distances_url
-from api.builders.body_builder import BodyBuilder
 
 
-def post_distance(session: requests.Session, from_airport: str, to_airport: str) -> requests.Response:
-    body = BodyBuilder().set("from", from_airport).set("to", to_airport).build()
-    return session.post(distances_url(), json=body)
+def distance_payload(from_airport: str = "TLV", to_airport: str = "JFK") -> dict:
+    return {"from": from_airport, "to": to_airport}
 
 
-def post_distance_payload(session: requests.Session, payload: dict) -> requests.Response:
-    """Send a raw payload to the distance endpoint — used for validation/negative tests."""
+def post_distance(session: requests.Session, payload: dict) -> requests.Response:
     return session.post(distances_url(), json=payload)

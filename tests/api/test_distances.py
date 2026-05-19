@@ -1,14 +1,13 @@
 import pytest
 import allure
-from api.clients.distances_client import post_distance, post_distance_payload
-from api.builders.body_builder import BodyBuilder
+from api.clients.distances_client import post_distance, distance_payload
 
 
 @pytest.mark.api
 @allure.feature("Distances")
 @allure.story("Calculate distance")
 def test_post_distance_returns_distance_data(session):
-    response = post_distance(session, "KIX", "SYD")
+    response = post_distance(session, distance_payload("KIX", "SYD"))
     data = response.json()["data"]
 
     assert response.status_code == 200
@@ -22,7 +21,7 @@ def test_post_distance_returns_distance_data(session):
 @allure.feature("Distances")
 @allure.story("Calculate distance")
 def test_post_distance_unit_relationship_is_correct(session):
-    attrs = post_distance(session, "KIX", "SYD").json()["data"]["attributes"]
+    attrs = post_distance(session, distance_payload("KIX", "SYD")).json()["data"]["attributes"]
 
     # 1 km = 0.621 miles = 0.540 nautical miles → km is always the largest value
     assert attrs["kilometers"] > attrs["miles"] > attrs["nautical_miles"]
@@ -32,8 +31,8 @@ def test_post_distance_unit_relationship_is_correct(session):
 @allure.feature("Distances")
 @allure.story("Calculate distance")
 def test_post_distance_is_symmetric(session):
-    km_forward = post_distance(session, "KIX", "SYD").json()["data"]["attributes"]["kilometers"]
-    km_reverse = post_distance(session, "SYD", "KIX").json()["data"]["attributes"]["kilometers"]
+    km_forward = post_distance(session, distance_payload("KIX", "SYD")).json()["data"]["attributes"]["kilometers"]
+    km_reverse = post_distance(session, distance_payload("SYD", "KIX")).json()["data"]["attributes"]["kilometers"]
 
     assert km_forward == km_reverse
 
@@ -42,7 +41,7 @@ def test_post_distance_is_symmetric(session):
 @allure.feature("Distances")
 @allure.story("Calculate distance")
 def test_post_distance_includes_airport_details(session):
-    attributes = post_distance(session, "KIX", "SYD").json()["data"]["attributes"]
+    attributes = post_distance(session, distance_payload("KIX", "SYD")).json()["data"]["attributes"]
 
     assert attributes["from_airport"]["iata"] == "KIX"
     assert attributes["to_airport"]["iata"] == "SYD"
@@ -52,7 +51,7 @@ def test_post_distance_includes_airport_details(session):
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_invalid_airport_returns_error(session):
-    response = post_distance(session, "INVALID", "SYD")
+    response = post_distance(session, distance_payload("INVALID", "SYD"))
 
     assert response.status_code == 422
 
@@ -61,8 +60,7 @@ def test_post_distance_invalid_airport_returns_error(session):
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_missing_from_field_returns_error(session):
-    body = BodyBuilder().set("to", "SYD").build()
-    response = post_distance_payload(session, body)
+    response = post_distance(session, distance_payload(from_airport=None))
 
     assert response.status_code == 422
 
@@ -71,8 +69,7 @@ def test_post_distance_missing_from_field_returns_error(session):
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_missing_to_field_returns_error(session):
-    body = BodyBuilder().set("from", "KIX").build()
-    response = post_distance_payload(session, body)
+    response = post_distance(session, distance_payload(to_airport=None))
 
     assert response.status_code == 422
 
@@ -81,7 +78,6 @@ def test_post_distance_missing_to_field_returns_error(session):
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_empty_body_returns_error(session):
-    body = BodyBuilder().build()
-    response = post_distance_payload(session, body)
+    response = post_distance(session, {})
 
     assert response.status_code == 422
