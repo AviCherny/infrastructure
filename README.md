@@ -116,7 +116,14 @@ The workflow also uploads the report as an artifact (retained for 14 days) under
 
 ## Design Principles
 
-- UI/API separation — run independently, fail independently
-- No base classes until two or more concrete classes share real logic
-- No utility folders unless three or more files need the same function
-- Smallest working solution first — abstractions are added when the signal appears, not before
+**UI/API separation — run independently, fail independently**
+UI tests fail due to browser rendering and navigation timing. API tests fail due to contracts and data. Mixing them means a flaky UI test can mask a real API regression. Keeping them separate lets each layer be run, debugged, and extended without touching the other.
+
+**No base classes until two or more concrete classes share real logic**
+A base class created too early locks in assumptions before you understand the real commonality. The cost of adding one later is low. The cost of ripping out a wrong one is high.
+
+**No utility folders unless three or more files need the same function**
+A `utils/` folder is where code goes to become invisible. If only one file needs a helper, the helper lives there. If two need it, it moves when the third appears — not before.
+
+**Smallest working solution first — abstractions are added when the signal appears, not before**
+Every abstraction has a maintenance cost. A `BodyBuilder`, a URL builder, a Page Object — each one is justified by repeated use. The rule is: build the concrete thing, then extract the pattern when you see it twice.
