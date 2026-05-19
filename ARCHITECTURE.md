@@ -37,8 +37,8 @@ Test file
 **Why a session fixture scoped to the test session, not per test?**
 Creating an HTTP session per test adds overhead and means headers must be configured repeatedly. The session fixture is created once, shared across all API tests, and torn down automatically by pytest.
 
-**Why `pytest_generate_tests` for airport parametrization?**
-Hardcoding airport IDs in `@pytest.mark.parametrize` means the test suite goes stale when the API adds or removes airports. `pytest_generate_tests` fetches the live list at collection time — the test always runs against what the API actually returns.
+**Why static `@pytest.mark.parametrize` for airport IDs?**
+Testing against a fixed set of well-known airports (KIX, SYD, JFK, LHR) gives deterministic, readable tests. Dynamic discovery at collection time adds complexity and makes failures harder to diagnose — if the API changes its airport list, test behavior changes silently. Static IDs make the contract explicit: these specific airports must always be reachable and return valid data.
 
 **Why BodyBuilder instead of plain dicts?**
 `{"form": "TLV"}` is a silent bug — wrong key, no error until runtime. `BodyBuilder().set("from", "TLV")` is the same dict, but the builder is the documented interface. Future validation or serialization logic has one place to live.
