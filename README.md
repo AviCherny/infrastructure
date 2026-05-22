@@ -117,8 +117,8 @@ The workflow also uploads the report as an artifact (retained for 14 days) under
 
 ## Design Principles
 
-**UI/API separation — run independently, fail independently**
-UI tests fail due to browser rendering and navigation timing. API tests fail due to contracts and data. Mixing them means a flaky UI test can mask a real API regression. Keeping them separate lets each layer be run, debugged, and extended without touching the other.
+**Three test layers — each with a clear role**
+API tests verify contracts and data. UI tests verify browser behavior. E2E tests (`@pytest.mark.e2e`) use the API to confirm preconditions and the UI to assert the user-facing result. Each layer can be run, debugged, and extended independently.
 
 **Base classes are introduced only when two or more concrete classes share real logic**
 A base class created too early locks in assumptions before you understand the real commonality. `BasePage` exists because all page classes share navigation and wait logic — that's the signal. Without that signal, the abstraction doesn't get added.
