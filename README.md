@@ -1,6 +1,6 @@
 # Infrastructure — Test Automation Framework
 
-CI: [![Tests](https://github.com/AviCherny/infrastructure/actions/workflows/tests.yml/badge.svg)](https://github.com/AviCherny/infrastructure/actions) &nbsp; Report: [Live Allure Report →](https://avicherny.github.io/infrastructure/)
+[Live Allure Report →](https://avicherny.github.io/infrastructure/)
 
 A layered Python automation framework covering API, UI, and E2E testing — built to demonstrate production-grade architecture decisions, not just passing tests.
 
