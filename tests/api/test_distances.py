@@ -17,6 +17,7 @@ def test_post_distance_returns_distance_data(session):
     assert isinstance(data["attributes"]["kilometers"], (int, float))
     assert isinstance(data["attributes"]["miles"], (int, float))
     assert isinstance(data["attributes"]["nautical_miles"], (int, float))
+    assert response.elapsed.total_seconds() < 2.0, f"Response too slow: {response.elapsed.total_seconds():.2f}s"
 
 
 @pytest.mark.api

@@ -14,6 +14,7 @@ def test_get_airports_returns_list(session):
     assert response.status_code == 200
     assert isinstance(data, list)
     assert len(data) > 0
+    assert response.elapsed.total_seconds() < 2.0, f"Response too slow: {response.elapsed.total_seconds():.2f}s"
 
 
 @pytest.mark.api
@@ -57,6 +58,7 @@ def test_get_airport_by_id_returns_correct_airport(session, airport_id):
     assert airport["attributes"]["iata"] == airport_id
     assert "name" in airport["attributes"]
     assert "country" in airport["attributes"]
+    assert response.elapsed.total_seconds() < 2.0, f"Response too slow: {response.elapsed.total_seconds():.2f}s"
 
 
 @pytest.mark.api

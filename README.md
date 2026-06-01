@@ -9,11 +9,13 @@ A layered Python automation framework covering API, UI, and E2E testing — buil
 ## What This Demonstrates
 
 - Tests that read like specs — no URLs, HTTP verbs, or raw dicts in test files
-- Layered architecture: Test → Client → Builder, each layer with a single responsibility
-- Reusable fixtures and session management across API and UI layers
-- Automatic failure diagnostics: screenshot, video, Playwright trace, and console errors on failure
-- Page Object chaining that makes multi-step flows self-documenting
-- Full CI/CD pipeline: test run → Allure report → GitHub Pages deploy
+- Layered architecture: Test → Client → Builder and Test → Flow → Page, each layer with a single responsibility
+- Reusable fixtures: session-scoped HTTP session, function-scoped browser contexts, pre-navigated UI fixture
+- Automatic failure diagnostics: screenshot, video, Playwright trace, and console errors — captured on every failure, published to Allure
+- Parallel execution controlled from config, with full test isolation across workers
+- `smoke` / `regression` markers for selective execution at different stages of a CI pipeline
+- Allure report always published — even when tests fail, which is when it matters most
+- Design rationale documented in [DESIGN.md](DESIGN.md) — decisions, tradeoffs, and what was intentionally not built
 
 ---
 
@@ -22,7 +24,7 @@ A layered Python automation framework covering API, UI, and E2E testing — buil
 | Layer | Tool |
 |-------|------|
 | Language | Python 3.12 |
-| Test runner | pytest |
+| Test runner | pytest + pytest-xdist |
 | API | requests |
 | UI | Playwright |
 | Reporting | Allure |
@@ -36,7 +38,7 @@ A layered Python automation framework covering API, UI, and E2E testing — buil
 ```
 Test → Client → URL Builder + Body Builder + Session
 ```
-Clients own the HTTP method. The URL builder is the single source of truth for all endpoints. Payloads go through a chainable `BodyBuilder` — no plain dicts, no key typos.
+Clients own the HTTP method. The URL builder is the single source of truth for all endpoints. Payloads go through a chainable `BodyBuilder` — no plain dicts, no silent key typos.
 
 **UI layer**
 ```
@@ -44,13 +46,15 @@ Test → Flow → Page Object → Base Page
 ```
 Each page action returns the next page in the flow. Selectors live only in page classes. Tests never break for infrastructure reasons.
 
-**Test layers**
+**Test markers**
 
 | Marker | Purpose |
 |--------|---------|
-| `@pytest.mark.api` | Contract validation — status codes, response structure, data integrity |
+| `@pytest.mark.api` | Contract validation — status codes, response structure, data integrity, response times |
 | `@pytest.mark.ui` | Browser behavior — user flows, page transitions |
 | `@pytest.mark.e2e` | API sets preconditions, UI asserts the user-facing result |
+| `@pytest.mark.smoke` | Critical path — confirms the system is alive; 5 tests, runs in seconds |
+| `@pytest.mark.regression` | Full coverage — edge cases, validation, error handling |
 
 ---
 
@@ -59,18 +63,20 @@ Each page action returns the next page in the flow. Selectors live only in page 
 ```
 infrastructure/
 ├── api/
-│   ├── clients/           # airports_client.py, distances_client.py
-│   └── builders/          # url_builder.py, body_builder.py
+│   ├── clients/               # airports_client.py, distances_client.py
+│   └── builders/              # url_builder.py, body_builder.py
 ├── ui/
-│   ├── pages/             # base_page, home, results, purchase, confirmation
-│   └── flows.py           # reusable multi-step user journeys
+│   ├── pages/                 # base_page, home, results, purchase, confirmation
+│   └── flows.py               # reusable multi-step user journeys
 ├── tests/
-│   ├── conftest.py        # session-scoped HTTP session + Allure hook
-│   ├── api/               # test_airports.py, test_distances.py, test_data.py
-│   └── ui/                # test_flights.py, test_api_then_ui.py, test_data.py
-├── config.py              # base URLs, env-overridable
-├── pytest.ini             # markers, paths, log format
-└── .github/workflows/     # CI: test → report → deploy
+│   ├── conftest.py            # session-scoped HTTP session, Allure hook, register_cleanup
+│   ├── api/                   # test_airports.py, test_distances.py, test_data.py
+│   └── ui/                    # test_flights.py, test_api_then_ui.py, test_failure_demo.py
+├── config.py                  # base URLs, Playwright settings, worker count — all env-overridable
+├── pytest.ini                 # markers, timeout, log format
+├── allure-categories.json     # classifies failures: product defect vs infrastructure problem
+├── DESIGN.md                  # architecture decisions and rationale
+└── .github/workflows/         # parallel CI: api-tests + ui-tests → report → deploy
 ```
 
 **Targets:** API tests run against [AirportGap](https://airportgap.com/api). UI and E2E tests run against [BlazeDemo](https://blazedemo.com). Both are public demo apps — the framework design is the deliverable.
@@ -96,26 +102,37 @@ playwright install chromium
 ## Running Tests
 
 ```bash
-pytest            # all tests
-pytest -m api     # API only
-pytest -m ui      # UI only
-pytest -m e2e     # E2E only
+pytest                  # full suite, parallel (2 workers by default)
+pytest -m api           # API tests only
+pytest -m ui            # UI tests only
+pytest -m e2e           # E2E tests only
+pytest -m smoke         # 5 critical-path tests — fast health check
+pytest -m regression    # edge cases, validation, error handling
 ```
 
-Environment overrides:
+**Parallel execution:**
+
+```bash
+WORKERS=4 pytest        # run with 4 workers
+WORKERS=1 pytest        # disable parallelism (serial, live logs)
+pytest -n 0             # same as WORKERS=1 — useful for debugging
+```
+
+**Environment overrides:**
 
 ```bash
 API_BASE_URL=https://airportgap.com/api pytest -m api
 UI_BASE_URL=https://blazedemo.com pytest -m ui
-HEADED=true pytest -m ui
+HEADED=true pytest -m ui          # run browser in headed mode
 ```
 
 ---
 
 ## CI/CD
 
-Every push to `main` triggers: **test → report → deploy**.
-Allure results and Playwright traces are uploaded as artifacts. The report publishes to GitHub Pages on success.
+Every push to `main` triggers two parallel jobs — API tests and UI + E2E tests — followed by report generation and deploy.
+
+The Allure report is **always published**, regardless of test outcome. Allure categories automatically classify failures as product defects or infrastructure problems. Playwright traces are uploaded as separate artifacts for direct download.
 
 [View live report →](https://avicherny.github.io/infrastructure/)
 
