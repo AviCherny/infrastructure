@@ -1,17 +1,15 @@
 import pytest
 import allure
 from dataclasses import replace
-from ui.pages.home_page import HomePage
 import ui.flows as flows
 
 
 @pytest.mark.ui
+@pytest.mark.smoke
 @allure.feature("Flights")
 @allure.story("Search")
-def test_search_for_flight_returns_relevant_results(page):
-    home = HomePage(page)
-    home.open()
-    results = home.search_flights("Boston", "Rome")
+def test_search_for_flight_returns_relevant_results(home_page):
+    results = home_page.search_flights("Boston", "Rome")
 
     # The results heading must reflect the searched route — not just any page
     heading = results.get_heading()
@@ -21,6 +19,7 @@ def test_search_for_flight_returns_relevant_results(page):
 
 
 @pytest.mark.ui
+@pytest.mark.regression
 @pytest.mark.xfail(
     strict=True,
     reason="blazedemo.com bug: purchase page returns TLV→SFO defaults regardless of search input",
@@ -38,6 +37,7 @@ def test_select_flight_reaches_purchase_page_for_correct_trip(page):
 
 
 @pytest.mark.ui
+@pytest.mark.smoke
 @allure.feature("Flights")
 @allure.story("Purchase")
 def test_complete_purchase_flow_returns_booking_confirmation(page, default_passenger):
@@ -52,6 +52,7 @@ def test_complete_purchase_flow_returns_booking_confirmation(page, default_passe
 
 
 @pytest.mark.ui
+@pytest.mark.regression
 @allure.feature("Flights")
 @allure.story("Purchase")
 def test_purchase_with_different_cardholder_returns_booking_confirmation(page, default_passenger):

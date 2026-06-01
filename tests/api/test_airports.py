@@ -4,6 +4,7 @@ import allure
 from api.clients.airports_client import get_airports, get_airport
 
 @pytest.mark.api
+@pytest.mark.smoke
 @allure.feature("Airports")
 @allure.story("Get all airports")
 def test_get_airports_returns_list(session):
@@ -16,6 +17,7 @@ def test_get_airports_returns_list(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Airports")
 @allure.story("Get all airports")
 def test_get_airports_iata_codes_are_valid(session):
@@ -28,6 +30,7 @@ def test_get_airports_iata_codes_are_valid(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Airports")
 @allure.story("Get all airports")
 def test_airport_item_has_expected_fields(session):
@@ -41,6 +44,7 @@ def test_airport_item_has_expected_fields(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Airports")
 @allure.story("Get airport by ID")
 @pytest.mark.parametrize("airport_id", ["KIX", "SYD", "JFK", "LHR"])
@@ -56,6 +60,7 @@ def test_get_airport_by_id_returns_correct_airport(session, airport_id):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Airports")
 @allure.story("Get airport by ID")
 def test_get_airport_invalid_id_returns_404(session):

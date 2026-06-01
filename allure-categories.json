@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Product defects",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Test infrastructure problems",
+    "matchedStatuses": ["broken"]
+  },
+  {
+    "name": "Known issues",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*xfail.*"
+  }
+]

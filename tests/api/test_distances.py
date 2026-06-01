@@ -5,6 +5,7 @@ from tests.api.test_data import FROM_AIRPORT, TO_AIRPORT
 
 
 @pytest.mark.api
+@pytest.mark.smoke
 @allure.feature("Distances")
 @allure.story("Calculate distance")
 def test_post_distance_returns_distance_data(session):
@@ -19,6 +20,7 @@ def test_post_distance_returns_distance_data(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Distances")
 @allure.story("Calculate distance")
 def test_post_distance_unit_relationship_is_correct(session):
@@ -29,6 +31,7 @@ def test_post_distance_unit_relationship_is_correct(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Distances")
 @allure.story("Calculate distance")
 def test_post_distance_is_symmetric(session):
@@ -39,6 +42,7 @@ def test_post_distance_is_symmetric(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Distances")
 @allure.story("Calculate distance")
 def test_post_distance_includes_airport_details(session):
@@ -49,6 +53,7 @@ def test_post_distance_includes_airport_details(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_invalid_airport_returns_error(session):
@@ -58,6 +63,7 @@ def test_post_distance_invalid_airport_returns_error(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_missing_from_field_returns_error(session):
@@ -67,6 +73,7 @@ def test_post_distance_missing_from_field_returns_error(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_missing_to_field_returns_error(session):
@@ -76,6 +83,7 @@ def test_post_distance_missing_to_field_returns_error(session):
 
 
 @pytest.mark.api
+@pytest.mark.regression
 @allure.feature("Distances")
 @allure.story("Validation")
 def test_post_distance_empty_body_returns_error(session):

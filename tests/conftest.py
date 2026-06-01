@@ -3,6 +3,16 @@ import logging
 import pytest
 import requests
 import allure
+from config import WORKERS
+
+
+def pytest_configure(config):
+    # If pytest-xdist is installed and -n was not explicitly passed, use WORKERS from config
+    try:
+        if config.option.numprocesses is None:
+            config.option.numprocesses = WORKERS
+    except AttributeError:
+        pass  # pytest-xdist not installed
 
 
 def _log_response(response: requests.Response, *args, **kwargs):
@@ -29,3 +39,20 @@ def session():
         s.hooks["response"].append(_log_response)
         logging.info("[session] HTTP session started")
         yield s
+
+
+@pytest.fixture
+def register_cleanup():
+    """
+    Register teardown callbacks that run even if the test fails mid-way.
+    Always register BEFORE the action that creates state — not after:
+
+        register_cleanup(lambda: delete_item(session, item_id))  # register first
+        item_id = create_item(session, payload).json()["id"]      # act after
+
+    Cleanups execute in reverse registration order (LIFO).
+    """
+    cleanups: list = []
+    yield cleanups.append
+    for fn in reversed(cleanups):
+        fn()

@@ -8,6 +8,7 @@ from uuid import uuid4
 from playwright.sync_api import sync_playwright
 from config import PLAYWRIGHT_HEADLESS, PLAYWRIGHT_TIMEOUT, PLAYWRIGHT_VIDEO_DIR, PLAYWRIGHT_TRACE_DIR
 from tests.ui.test_data import make_passenger
+from ui.pages.home_page import HomePage
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
@@ -87,3 +88,11 @@ def run_prefix():
 @pytest.fixture
 def default_passenger(run_prefix):
     return make_passenger(run_prefix)
+
+
+@pytest.fixture
+def home_page(page):
+    """Pre-navigated home page. Uses the function-scoped page fixture — full isolation maintained."""
+    home = HomePage(page)
+    home.open()
+    return home
