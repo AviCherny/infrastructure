@@ -71,10 +71,6 @@ Browser contexts are function-scoped — fresh cookies, storage, and history per
 
 API `requests.Session` is session-scoped because API tests are stateless. Shared headers are set once.
 
-### home_page: pre-navigated starting point
-
-Tests that start at the BlazeDemo home page don't repeat `home = HomePage(page); home.open()` boilerplate. The `home_page` fixture wraps the function-scoped `page` fixture — full isolation is maintained. Each test gets its own fresh browser context; the fixture just handles the navigation.
-
 ---
 
 ## Anti-flakiness strategy
