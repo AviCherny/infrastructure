@@ -36,8 +36,8 @@ When a test fails, the report shows the screenshot, video, console errors, and f
 ### Layers
 
 ```
-API:  test → client → url_builder + body_builder
-UI:   test → flow → page object → base_page
+API:  test → client → url_builder / body_builder
+UI:   test → [flow →] page object → base_page
 ```
 
 Each layer has one job:
