@@ -20,13 +20,13 @@ Designed as a portfolio project and interview reference. Every decision here ref
 **Python + pytest**
 Test code reads like English. pytest fixtures are the cleanest dependency injection model in any language. Developers reviewing tests don't need a QA background to understand them.
 
-**Playwright (over Selenium)**
-Auto-waits on every action eliminate the `time.sleep(2)` anti-pattern. `expect()` assertions retry until the condition is met. Traces, videos, and screenshots are built in — not bolt-ons. The sync API keeps test code linear and readable.
+**Playwright**
+Every action waits for the element to be ready — no manual waits. `expect()` assertions retry until the condition is met. Traces, videos, and screenshots are built in. The sync API keeps test code linear and readable.
 
-**requests (over httpx, aiohttp)**
+**requests**
 Explicit, no magic, battle-tested. The `Session` object gives us shared headers and a natural home for the response logging hook. Async would add complexity with no benefit for sequential contract tests.
 
-**Allure (over pytest-html)**
+**Allure**
 Rich attachment support: screenshots, videos, traces, and response bodies all land in the report with zero test-level boilerplate. The step decorator makes reports read like a user story. GitHub Pages deployment makes the report accessible without downloading artifacts.
 
 ---
