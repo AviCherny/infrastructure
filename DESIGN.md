@@ -73,17 +73,6 @@ Browser contexts are function-scoped — fresh cookies, storage, and history per
 
 API `requests.Session` is session-scoped because API tests are stateless. Shared headers are set once.
 
-### register_cleanup: register before action
-
-```python
-register_cleanup(lambda: delete_resource(session, resource_id))  # register first
-resource_id = create_resource(session, payload).json()["id"]     # act after
-```
-
-Teardown is scheduled before the action that creates state. If the test fails before creating the resource, cleanup runs safely (nothing to undo). If the test creates the resource and then fails, cleanup runs and removes it. This eliminates a whole class of test-pollution bugs where a failed test leaves state that breaks the next test.
-
-Not used by current tests (current API targets are read-only). Present as a framework pattern for when CRUD endpoints are tested.
-
 ### home_page: pre-navigated starting point
 
 Tests that start at the BlazeDemo home page don't repeat `home = HomePage(page); home.open()` boilerplate. The `home_page` fixture wraps the function-scoped `page` fixture — full isolation is maintained. Each test gets its own fresh browser context; the fixture just handles the navigation.
@@ -167,6 +156,22 @@ Both API clients are 5–12 lines each. They share no logic that would justify a
 
 **Data factories (factory_boy)**
 19 tests, 2 data shapes. `make_passenger()` in `test_data.py` does the job. Factory classes add a dependency, a learning curve, and an abstraction layer for something that doesn't need one at this scale.
+
+---
+
+## What Next
+
+**CRUD endpoint tests**
+The `register_cleanup` fixture is already in place — register the cleanup before the action that creates state, so teardown runs even if the test fails mid-way. Waiting for a writable endpoint to test against.
+
+**Cookie injection for auth flows**
+Create an auth session via API, inject the token directly into the browser context. Skips the login UI for tests that don't test authentication — faster and more reliable than navigating through the form.
+
+**TypedDict schema assertions**
+Assert API response shape structurally, not just field-by-field. A dedicated schema file catches contract breaks without adding a Pydantic dependency.
+
+**`--env` flag**
+`API_BASE_URL` and `UI_BASE_URL` are already env-overridable. One CLI option (`--env staging`) mapping to a URL set would make environment switching clean.
 
 ---
 
