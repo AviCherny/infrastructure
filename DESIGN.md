@@ -40,8 +40,6 @@ API:  test → client → url_builder / body_builder
 UI:   test → [flow →] page object → base_page
 ```
 
-Each layer has one job:
-
 | Layer | Owns | Does NOT own |
 |---|---|---|
 | Test | Intent, assertions | URLs, HTTP verbs, selectors, navigation |
