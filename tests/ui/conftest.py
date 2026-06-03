@@ -62,6 +62,12 @@ def page(browser, request):
             os.makedirs(PLAYWRIGHT_TRACE_DIR, exist_ok=True)
             trace_path = f"{PLAYWRIGHT_TRACE_DIR}/{request.node.name}.zip"
             context.tracing.stop(path=trace_path)
+            allure.attach(
+                Path(trace_path).read_bytes(),
+                name="playwright_trace",
+                attachment_type="application/zip",
+                extension="zip",
+            )
             logging.info(f"[page] Trace saved → {trace_path} (open at trace.playwright.dev)")
         else:
             context.tracing.stop()

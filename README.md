@@ -132,7 +132,7 @@ HEADED=true pytest -m ui          # run browser in headed mode
 
 Every push to `main` triggers two parallel jobs — API tests and UI + E2E tests — followed by report generation and deploy.
 
-The Allure report is **always published**, regardless of test outcome. Allure categories automatically classify failures as product defects or infrastructure problems. Playwright traces are uploaded as separate artifacts for direct download.
+The Allure report is **always published**, regardless of test outcome. Allure categories automatically classify failures as product defects or infrastructure problems. On failure, the Playwright trace is attached directly to Allure — download the zip and open with `playwright show-trace trace.zip`, or upload to [trace.playwright.dev](https://trace.playwright.dev) with no installation required.
 
 [View live report →](https://avicherny.github.io/infrastructure/)
 

@@ -90,10 +90,10 @@ On any test failure, four artifacts are automatically captured:
 
 1. **Screenshot** — attached to Allure
 2. **Video** — attached to Allure (deleted on pass to save CI storage)
-3. **Playwright trace** — saved to `traces/<test_name>.zip`, open at [trace.playwright.dev](https://trace.playwright.dev)
+3. **Playwright trace** — attached to Allure and saved to `traces/<test_name>.zip`
 4. **Console errors** — attached to Allure
 
-The trace is the most powerful: step-by-step DOM snapshots, network requests, and console output. When a test fails in CI, you can open the trace and see exactly what the browser saw at every step without re-running.
+The trace is the most powerful: step-by-step DOM snapshots, network requests, and console output. When a test fails, download the zip from Allure and open it with `playwright show-trace trace.zip` — or upload to [trace.playwright.dev](https://trace.playwright.dev) — no installation required. You see exactly what the browser saw at every step, without re-running.
 
 `test_failure_demo.py` is an intentional `xfail(strict=True)` test that guarantees this pipeline runs on every CI push. If it somehow passes (which it never should), `strict=True` breaks the CI build — the diagnostic pipeline is tested continuously, not just when a real test happens to fail.
 
