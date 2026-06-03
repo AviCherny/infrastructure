@@ -125,7 +125,6 @@ Key decisions:
 
 **Allure categories** classify failures automatically: product defects (AssertionError), infrastructure problems (other exceptions), known issues (xfail). This makes triage faster when multiple tests fail.
 
-**Traces uploaded separately** for direct download from the CI artifacts panel, bypassing the Allure report.
 
 **E2E tests run in the UI job.** They need Playwright installed; the API job does not install it. Tests marked `e2e` run alongside `ui` tests.
 
