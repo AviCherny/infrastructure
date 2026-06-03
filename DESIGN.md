@@ -11,7 +11,7 @@ A reusable automation framework targeting two real-world services:
 - **AirportGap** — REST API for airport data and distance calculations
 - **BlazeDemo** — web flight booking app
 
-Designed as a portfolio project and interview reference. Every decision here is one you'd make in a real project — not clever for its own sake, not simplified for tutorial purposes.
+Designed as a portfolio project and interview reference. Every decision here reflects how this would be built on a real team — production-minded.
 
 ---
 
