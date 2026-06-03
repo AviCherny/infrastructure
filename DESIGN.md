@@ -40,6 +40,8 @@ API:  test → client → url_builder / body_builder
 UI:   test → [flow →] page object → base_page
 ```
 
+Each layer has one job:
+
 | Layer | Owns | Does NOT own |
 |---|---|---|
 | Test | Intent, assertions | URLs, HTTP verbs, selectors, navigation |
@@ -48,8 +50,6 @@ UI:   test → [flow →] page object → base_page
 | Flow | Multi-step user journeys | Selectors, assertions |
 | Page | Selectors, page-specific actions | Assertions, business logic |
 | BasePage | Shared navigation + wait utilities | Page-specific behavior |
-
-**Why this matters:** When the API base URL changes, you change `url_builder.py`. When a selector breaks, you change one page object. Tests never need to change for infrastructure reasons.
 
 ### URL builder as single source of truth
 
