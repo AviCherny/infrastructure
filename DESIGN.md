@@ -27,7 +27,7 @@ Every action waits for the element to be ready — no manual waits. `expect()` a
 Explicit, no magic, battle-tested. The `Session` object gives us shared headers and a natural home for the response logging hook. Async would add complexity with no benefit for sequential contract tests.
 
 **Allure**
-Rich attachment support: screenshots, videos, traces, and response bodies all land in the report with zero test-level boilerplate. The step decorator makes reports read like a user story. GitHub Pages deployment makes the report accessible without downloading artifacts.
+When a test fails, the report shows the screenshot, video, console errors, and full API response — all in one place, without digging through CI logs. GitHub Pages makes it accessible to anyone with the link.
 
 ---
 
