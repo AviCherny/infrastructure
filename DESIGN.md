@@ -143,36 +143,3 @@ Flaky tests get fixed, not retried. Automatic retry masks the root cause.
 
 **Pydantic for schema validation**
 TypedDict is the right tool for asserting API response shape in contract tests. Pydantic's value (parsing, coercion, nested validation, error formatting) belongs in application code that consumes and transforms data — not in test assertions that check structure.
-
-
-
----
-
-## What Next
-
-
-**Cookie injection for auth flows**
-Create an auth session via API, inject the token directly into the browser context. Skips the login UI for tests that don't test authentication — faster and more reliable than navigating through the form.
-
-**TypedDict schema assertions**
-Assert API response shape structurally, not just field-by-field. A dedicated schema file catches contract breaks early.
-
-
----
-
-## What changes at 10x scale
-
-**Test data ownership**
-Each test creates its own user/resource via API and deletes it on teardown. Shared hardcoded IDs become a serialization bottleneck in parallel runs and a pollution risk if cleanup fails.
-
-**Cookie injection**
-Create auth sessions via API, inject the token into the browser context. Skips the login UI entirely for tests that don't test authentication. Faster, more reliable than UI-based login.
-
-**Contract testing layer**
-A dedicated suite using TypedDict schemas as the source of truth for API response shape — fast, isolated, first line of defense against API contract breaks.
-
-**Multiple environments**
-Staging, UAT, production. `API_BASE_URL` and `UI_BASE_URL` are already env-overridable. Adding a `--env` CLI option with a mapping (staging → URLs, prod → URLs) would make environment switching ergonomic.
-
-**Flakiness visibility**
-Track pass rates over time with Allure history trends. Flag tests that fail intermittently across runs. At scale, a 1% flake rate across 1000 tests means 10 false failures per run — unacceptable.
