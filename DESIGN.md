@@ -144,8 +144,8 @@ Automatic retry hides flakiness. A flaky test should be fixed, not retried silen
 **Pydantic for schema validation**
 TypedDict is the right tool for asserting API response shape in contract tests. Pydantic's value (parsing, coercion, nested validation, error formatting) belongs in application code that consumes and transforms data — not in test assertions that check structure.
 
-**Base class for clients**
-Both API clients are 5–12 lines each. They share no logic that would justify a base class. Adding one would be ceremony: a parent class with no methods, existing only to be inherited. Base classes earn their place when two or more concrete classes share real, non-trivial behavior.
+**Base class for API clients**
+Both clients are 5–12 lines each with no shared logic. `BasePage` exists in the UI layer where shared navigation and wait utilities are real and used across every page.
 
 **Data factories (factory_boy)**
 19 tests, 2 data shapes. `make_passenger()` in `test_data.py` does the job. Factory classes add a dependency, a learning curve, and an abstraction layer for something that doesn't need one at this scale.
