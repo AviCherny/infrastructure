@@ -157,8 +157,6 @@ Create an auth session via API, inject the token directly into the browser conte
 **TypedDict schema assertions**
 Assert API response shape structurally, not just field-by-field. A dedicated schema file catches contract breaks early.
 
-**`--env` flag**
-`API_BASE_URL` and `UI_BASE_URL` are already env-overridable. One CLI option (`--env staging`) mapping to a URL set would make environment switching clean.
 
 ---
 
