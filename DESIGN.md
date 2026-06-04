@@ -130,7 +130,7 @@ Key decisions:
 
 ---
 
-## What was intentionally not built
+## Scope decisions
 
 **Docker**
 Solo project, no team environment consistency problem to solve. `pip install -r requirements.txt && playwright install` is sufficient. Docker would add image maintenance overhead with no benefit.
