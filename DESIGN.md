@@ -57,7 +57,7 @@ All API endpoints live in `api/builders/url_builder.py`. If the same endpoint we
 
 ### BodyBuilder for all request payloads
 
-No plain dicts in client functions. `{"form": "TLV"}` (wrong key) passes Python silently and produces a 422 at runtime. `BodyBuilder().set("from", "TLV")` makes the intent explicit and is easy to grep. The recursive `.build()` handles nested payloads correctly.
+`BodyBuilder` wraps every payload. `{"form": "TLV"}` (wrong key) passes Python silently and produces a 422 at runtime — `BodyBuilder().set("from", "TLV")` makes the intent explicit and is easy to grep. The recursive `.build()` handles nested payloads correctly.
 
 ---
 
@@ -73,9 +73,9 @@ API `requests.Session` is session-scoped because API tests are stateless. Shared
 
 ---
 
-## Anti-flakiness strategy
+## Stability
 
-Zero `time.sleep()`. Every wait is condition-based:
+Every wait is condition-based:
 - Playwright auto-waits on every action (click, fill, select_option)
 - `expect()` assertions retry until the condition is met or timeout
 - `networkidle` on page load — JS has finished rendering before we interact
