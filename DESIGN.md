@@ -150,8 +150,6 @@ TypedDict is the right tool for asserting API response shape in contract tests. 
 
 ## What Next
 
-**CRUD endpoint tests**
-The `register_cleanup` fixture is already in place — register the cleanup before the action that creates state, so teardown runs even if the test fails mid-way. Waiting for a writable endpoint to test against.
 
 **Cookie injection for auth flows**
 Create an auth session via API, inject the token directly into the browser context. Skips the login UI for tests that don't test authentication — faster and more reliable than navigating through the form.
