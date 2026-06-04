@@ -139,14 +139,12 @@ Solo project, no team environment consistency problem to solve. `pip install -r 
 BlazeDemo doesn't expose browser-specific bugs. Parametrizing over Chromium/Firefox/WebKit would triple UI test count and CI time for zero defect signal at this scope.
 
 **pytest-rerunfailures (automatic retry)**
-Automatic retry hides flakiness. A flaky test should be fixed, not retried silently. If a test is genuinely non-deterministic (network, timing), the root cause needs addressing — not masking. The only exception would be tests that exercise external services with known unreliability, and those should be explicitly marked.
+Flaky tests get fixed, not retried. Automatic retry masks the root cause.
 
 **Pydantic for schema validation**
 TypedDict is the right tool for asserting API response shape in contract tests. Pydantic's value (parsing, coercion, nested validation, error formatting) belongs in application code that consumes and transforms data — not in test assertions that check structure.
 
 
-**Data factories (factory_boy)**
-19 tests, 2 data shapes. `make_passenger()` in `test_data.py` does the job. Factory classes add a dependency, a learning curve, and an abstraction layer for something that doesn't need one at this scale.
 
 ---
 
@@ -159,7 +157,7 @@ The `register_cleanup` fixture is already in place — register the cleanup befo
 Create an auth session via API, inject the token directly into the browser context. Skips the login UI for tests that don't test authentication — faster and more reliable than navigating through the form.
 
 **TypedDict schema assertions**
-Assert API response shape structurally, not just field-by-field. A dedicated schema file catches contract breaks without adding a Pydantic dependency.
+Assert API response shape structurally, not just field-by-field. A dedicated schema file catches contract breaks early.
 
 **`--env` flag**
 `API_BASE_URL` and `UI_BASE_URL` are already env-overridable. One CLI option (`--env staging`) mapping to a URL set would make environment switching clean.
@@ -175,7 +173,7 @@ Each test creates its own user/resource via API and deletes it on teardown. Shar
 Create auth sessions via API, inject the token into the browser context. Skips the login UI entirely for tests that don't test authentication. Faster, more reliable than UI-based login.
 
 **Contract testing layer**
-A dedicated suite using TypedDict schemas as the source of truth for API response shape. E2E tests are too slow and too dependent on the full stack to serve as the first line of defense against API contract breaks.
+A dedicated suite using TypedDict schemas as the source of truth for API response shape — fast, isolated, first line of defense against API contract breaks.
 
 **Multiple environments**
 Staging, UAT, production. `API_BASE_URL` and `UI_BASE_URL` are already env-overridable. Adding a `--env` CLI option with a mapping (staging → URLs, prod → URLs) would make environment switching ergonomic.
