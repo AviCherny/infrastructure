@@ -7,7 +7,7 @@ API_BASE_URL = os.getenv("API_BASE_URL", "https://airportgap.com/api")
 WORKERS = int(os.getenv("WORKERS", "2"))
 
 # Playwright
-PLAYWRIGHT_HEADLESS = os.getenv("HEADED") != "true"
+PLAYWRIGHT_HEADLESS = os.getenv("HEADLESS", "true") == "true"
 PLAYWRIGHT_TIMEOUT = 15_000
 PLAYWRIGHT_VIDEO_DIR = "videos/"
 PLAYWRIGHT_TRACE_DIR = "traces/"
