@@ -17,7 +17,7 @@ class ResultsPage(BasePage):
         return self._flight_rows.count()
 
     @allure.step("Choose flight #{index}")
-    def choose_flight(self, index: int = 0):
+    def choose_flight(self, index: int = 0) -> PurchasePage:
         self._flight_rows.nth(index).locator("input[value='Choose This Flight']").click()
         self.wait_for_url("**/purchase.php")
         return PurchasePage(self.page)

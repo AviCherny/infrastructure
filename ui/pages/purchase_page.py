@@ -39,7 +39,7 @@ class PurchasePage(BasePage):
         return self._trip_summary.inner_text()
 
     @allure.step("Fill purchase form and submit")
-    def fill_and_submit(self, details: PassengerDetails):
+    def fill_and_submit(self, details: PassengerDetails) -> ConfirmationPage:
         self._name.fill(details.name)
         self._address.fill(details.address)
         self._city.fill(details.city)

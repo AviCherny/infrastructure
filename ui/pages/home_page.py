@@ -13,11 +13,11 @@ class HomePage(BasePage):
         self._find_flights_btn = page.locator("input[value='Find Flights']")
 
     @allure.step("Open home page")
-    def open(self):
+    def open(self) -> None:
         self.navigate_to(UI_BASE_URL)
 
     @allure.step("Search flights: {departure} → {destination}")
-    def search_flights(self, departure: str, destination: str):
+    def search_flights(self, departure: str, destination: str) -> ResultsPage:
         self._from_port.select_option(departure)
         self._to_port.select_option(destination)
         self._find_flights_btn.click()
