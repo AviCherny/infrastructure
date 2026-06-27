@@ -2,6 +2,12 @@ import pytest
 import allure
 from dataclasses import replace
 import ui.flows as flows
+from tests.ui.test_data import make_passenger
+
+
+@pytest.fixture
+def default_passenger(run_prefix):
+    return make_passenger(run_prefix)
 
 
 @pytest.mark.ui

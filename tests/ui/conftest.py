@@ -7,7 +7,6 @@ from pathlib import Path
 from uuid import uuid4
 from playwright.sync_api import sync_playwright
 from config import PLAYWRIGHT_HEADLESS, PLAYWRIGHT_TIMEOUT, PLAYWRIGHT_VIDEO_DIR, PLAYWRIGHT_TRACE_DIR
-from tests.ui.test_data import make_passenger
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
@@ -88,8 +87,3 @@ def page(browser, request):
 @pytest.fixture(scope="session")
 def run_prefix():
     return f"TEST_{datetime.now().strftime('%Y%m%d')}_{uuid4().hex[:6]}"
-
-
-@pytest.fixture
-def default_passenger(run_prefix):
-    return make_passenger(run_prefix)
