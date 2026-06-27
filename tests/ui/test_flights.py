@@ -8,8 +8,8 @@ import ui.flows as flows
 @pytest.mark.smoke
 @allure.feature("Flights")
 @allure.story("Search")
-def test_search_for_flight_returns_relevant_results(home_page):
-    results = home_page.search_flights("Boston", "Rome")
+def test_search_for_flight_returns_relevant_results(page):
+    results = flows.search_flights(page, "Boston", "Rome")
 
     # The results heading must reflect the searched route — not just any page
     heading = results.get_heading()
