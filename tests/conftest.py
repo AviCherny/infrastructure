@@ -39,20 +39,3 @@ def session():
         s.hooks["response"].append(_log_response)
         logging.info("[session] HTTP session started")
         yield s
-
-
-@pytest.fixture
-def register_cleanup():
-    """
-    Register teardown callbacks that run even if the test fails mid-way.
-    Always register BEFORE the action that creates state — not after:
-
-        register_cleanup(lambda: delete_item(session, item_id))  # register first
-        item_id = create_item(session, payload).json()["id"]      # act after
-
-    Cleanups execute in reverse registration order (LIFO).
-    """
-    cleanups: list = []
-    yield cleanups.append
-    for fn in reversed(cleanups):
-        fn()

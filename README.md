@@ -69,7 +69,7 @@ infrastructure/
 │   ├── pages/                 # base_page, home, results, purchase, confirmation
 │   └── flows.py               # reusable multi-step user journeys
 ├── tests/
-│   ├── conftest.py            # session-scoped HTTP session, Allure hook, register_cleanup
+│   ├── conftest.py            # session-scoped HTTP session, Allure hook
 │   ├── api/                   # test_airports.py, test_distances.py, test_data.py
 │   └── ui/                    # test_flights.py, test_api_then_ui.py, test_failure_demo.py
 ├── config.py                  # base URLs, Playwright settings, worker count — all env-overridable
