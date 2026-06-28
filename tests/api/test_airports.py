@@ -37,7 +37,8 @@ def test_get_airports_iata_codes_are_valid(session):
 def test_airport_item_has_expected_fields(session):
     airports = get_airports(session).json()["data"]
     for airport in airports:
-        assert isinstance(airport["id"], str) and len(airport["id"]) > 0
+        assert isinstance(airport["id"], str), f"Expected id to be str, got {type(airport['id'])}"
+        assert len(airport["id"]) > 0, "Airport id must not be empty"
         assert airport["type"] == "airport"
         assert "name" in airport["attributes"]
         assert "iata" in airport["attributes"]

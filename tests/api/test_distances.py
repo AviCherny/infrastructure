@@ -28,7 +28,10 @@ def test_post_distance_unit_relationship_is_correct(session):
     attrs = post_distance(session, distance_payload(FROM_AIRPORT, TO_AIRPORT)).json()["data"]["attributes"]
 
     # 1 km = 0.621 miles = 0.540 nautical miles → km is always the largest value
-    assert attrs["kilometers"] > attrs["miles"] > attrs["nautical_miles"]
+    assert attrs["kilometers"] > attrs["miles"], \
+        f"Expected km > miles: {attrs['kilometers']} > {attrs['miles']}"
+    assert attrs["miles"] > attrs["nautical_miles"], \
+        f"Expected miles > nautical_miles: {attrs['miles']} > {attrs['nautical_miles']}"
 
 
 @pytest.mark.api
